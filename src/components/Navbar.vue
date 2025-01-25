@@ -11,14 +11,31 @@
         router
         @select="handleMenuSelect"
       >
+        <!-- 公共菜单项 -->
         <el-menu-item index="/home">
           <i class="el-icon-s-home"></i>
           <span>Home</span>
         </el-menu-item>
-        <el-menu-item index="/case-management">
-          <i class="el-icon-s-management"></i>
-          <span>Case Management</span>
+
+        <!-- senior 用户的专属菜单 -->
+        <el-menu-item
+          v-if="userRole === 'senior'"
+          index="/senior-cases"
+        >
+          <i class="el-icon-folder"></i>
+          <span>Senior Case List</span>
         </el-menu-item>
+
+        <!-- junior 用户的专属菜单 -->
+        <el-menu-item
+          v-if="userRole === 'junior'"
+          index="/junior-cases"
+        >
+          <i class="el-icon-folder"></i>
+          <span>Junior Case List</span>
+        </el-menu-item>
+
+        <!-- Logout 菜单 -->
         <el-menu-item index="/login">
           <i class="el-icon-s-tools"></i>
           <span @click.stop="logout">Logout</span>
@@ -36,6 +53,11 @@
 
 <script>
 export default {
+  computed: {
+    userRole() {
+      return this.$store.getters.userRole; // 从 Vuex 获取当前用户角色
+    },
+  },
   data() {
     return {
       activeMenu: "/home", // 默认激活首页

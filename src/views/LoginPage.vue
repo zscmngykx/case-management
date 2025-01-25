@@ -1,62 +1,132 @@
 <template>
-    <div class="login">
-      <h2>Login</h2>
-      <form @submit.prevent="login">
-        <div>
-          <label for="username">Username</label>
-          <input type="text" v-model="username" id="username" required />
-        </div>
-        <div>
-          <label for="password">Password</label>
-          <input type="password" v-model="password" id="password" required />
-        </div>
-        <button type="submit">Login</button>
-      </form>
+  <div class="login_face">
+    <div class="login_box">
+      <div class="img_box"></div> <!-- Profile image box -->
+
+      <!-- Login form -->
+      <div class="login_msg">
+        <!-- Username input -->
+        <el-input placeholder="Enter your username" v-model="username" clearable id="account"></el-input>
+        <!-- Password input -->
+        <el-input placeholder="Enter your password" v-model="password" id="password" show-password></el-input>
+        <!-- Login button -->
+        <el-button id="btn" type="primary" @click="login">Log In</el-button>
+      </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        username: '',
-        password: ''
+  </div>
+</template>
+
+<script>
+import { users } from "@/mockData/users"; // Ensure you have this path and file in your project
+
+export default {
+  data() {
+    return {
+      username: "",
+      password: "",
+      error: "" // To handle and display login errors if needed
+    };
+  },
+  methods: {
+    login() {
+      if (!this.username) {
+        this.$message({
+          message: 'Username cannot be empty!',
+          type: 'warning'
+        });
+        return;
       }
-    },
-    methods: {
-      login() {
-        // 模拟登录成功
-        const token = 'fake_token_example' // 假设获取到一个 token
-        this.$store.dispatch('login', token)
-        this.$router.push('/home') // 登录成功后跳转到首页
+      if (!this.password) {
+        this.$message({
+          message: 'Password cannot be empty!',
+          type: 'warning'
+        });
+        return;
+      }
+
+      const user = users.find(
+        u => u.username === this.username && u.password === this.password
+      );
+
+      if (user) {
+        this.$store.dispatch("login", user);
+        this.$router.push("/home"); // Redirect to home after successful login
+      } else {
+        this.$message({
+          message: 'Invalid username or password',
+          type: 'error'
+        });
       }
     }
   }
-  </script>
-  
-  <style scoped>
-  /* Login page styles */
-  .login {
-    max-width: 300px;
-    margin: 0 auto;
-    padding: 1rem;
-  }
-  form div {
-    margin-bottom: 1rem;
-  }
-  label {
-    display: block;
-  }
-  input {
-    width: 100%;
-    padding: 0.5rem;
-  }
-  button {
-    width: 100%;
-    padding: 0.5rem;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  </style>
+}
+</script>
+
+<style scoped>
+
+
+
+.login_msg {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;    
+  justify-content: center; 
+  gap: 40px;              
+  width: 400px;
+  height: 300px;
+  margin: auto;
+  margin-top: 3px;
+}
+
+
+#account, #password {
+  width: 400px;
+  height: 50px;
+  margin: 15px;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 25px;
+}
+
+#btn {
+  width: 220px;
+  height: 50px;
+  border-radius: 40px;
+  margin: 0;
+  background-color: #BA0A26;
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease; 
+}
+
+#btn:hover {
+  background-color: #8A081E;
+}
+
+
+.login_face {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+}
+
+.login_box {
+  width: 550px;
+  height: 450px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.65); /* Adjust transparency as necessary */
+}
+
+
+.img_box {
+  width: 130px;
+  height: 130px;
+  background-image: url('@/assets/profile.png'); /* Adjusted path for the profile image */
+  background-size: cover;
+  border-radius: 50%;
+  border: white solid 6px;
+  margin: auto;
+  margin-top: -68px;
+}
+</style>
