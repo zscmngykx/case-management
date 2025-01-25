@@ -17,69 +17,79 @@
 </template>
 
 <script>
-import { users } from "@/mockData/users"; // Ensure you have this path and file in your project
+import { users } from "@/mockData/users"; // 引入本地用户数据
 
 export default {
   data() {
     return {
       username: "",
       password: "",
-      error: "" // To handle and display login errors if needed
     };
   },
   methods: {
     login() {
       if (!this.username) {
         this.$message({
-          message: 'Username cannot be empty!',
-          type: 'warning'
+          message: "Username cannot be empty!",
+          type: "warning",
         });
         return;
       }
       if (!this.password) {
         this.$message({
-          message: 'Password cannot be empty!',
-          type: 'warning'
+          message: "Password cannot be empty!",
+          type: "warning",
         });
         return;
       }
 
+      // 检查用户是否存在
       const user = users.find(
-        u => u.username === this.username && u.password === this.password
+        (u) => u.username === this.username && u.password === this.password
       );
 
       if (user) {
-        this.$store.dispatch("login", user);
-        this.$router.push("/home"); // Redirect to home after successful login
+        // 保存用户信息到 localStorage
+        localStorage.setItem("token", "testToken"); // 假设一个 token
+        localStorage.setItem("role", user.role);
+
+        // 根据角色跳转到对应页面
+        if (user.role === "senior") {
+          this.$router.push("/senior-cases");
+        } else if (user.role === "junior") {
+          this.$router.push("/junior-cases");
+        } else {
+          this.$message({
+            message: "Invalid user role!",
+            type: "error",
+          });
+        }
       } else {
         this.$message({
-          message: 'Invalid username or password',
-          type: 'error'
+          message: "Invalid username or password",
+          type: "error",
         });
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
-
-
-
 .login_msg {
   display: flex;
-  flex-direction: column; 
-  align-items: center;    
-  justify-content: center; 
-  gap: 40px;              
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
   width: 400px;
   height: 300px;
   margin: auto;
   margin-top: 3px;
 }
 
-
-#account, #password {
+#account,
+#password {
   width: 400px;
   height: 50px;
   margin: 15px;
@@ -92,16 +102,15 @@ export default {
   height: 50px;
   border-radius: 40px;
   margin: 0;
-  background-color: #BA0A26;
+  background-color: #ba0a26;
   color: white;
   border: none;
-  transition: background-color 0.3s ease; 
+  transition: background-color 0.3s ease;
 }
 
 #btn:hover {
-  background-color: #8A081E;
+  background-color: #8a081e;
 }
-
 
 .login_face {
   display: flex;
@@ -115,14 +124,13 @@ export default {
   width: 550px;
   height: 450px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.65); /* Adjust transparency as necessary */
+  background: rgba(255, 255, 255, 0.65);
 }
-
 
 .img_box {
   width: 130px;
   height: 130px;
-  background-image: url('@/assets/profile.png'); /* Adjusted path for the profile image */
+  background-image: url('@/assets/profile.png'); /* 确保路径正确 */
   background-size: cover;
   border-radius: 50%;
   border: white solid 6px;

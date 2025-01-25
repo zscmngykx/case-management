@@ -1,93 +1,54 @@
 <template>
-  <el-container style="height: 100vh;">
-    <!-- 左侧导航栏 -->
-    <el-aside width="200px" class="navbar">
-      <el-menu
-        :default-active="activeMenu"
-        class="el-menu-vertical-demo"
-        background-color="#4CAF50"
-        text-color="#fff"
-        active-text-color="#ffd04b"
-        router
-        @select="handleMenuSelect"
-      >
-        <!-- 公共菜单项 -->
-        <el-menu-item index="/home">
-          <i class="el-icon-s-home"></i>
-          <span>Home</span>
-        </el-menu-item>
+  <div class="navbar">
+    <el-menu :default-active="activeMenu" class="el-menu-vertical" router>
+      <!-- 公共菜单项 -->
+      <el-menu-item index="/home">
+        <i class="el-icon-house"></i>
+        <span>Home</span>
+      </el-menu-item>
 
-        <!-- senior 用户的专属菜单 -->
-        <el-menu-item
-          v-if="userRole === 'senior'"
-          index="/senior-cases"
-        >
+      <!-- 根据角色动态显示菜单项 -->
+      <template v-if="role === 'senior'">
+        <el-menu-item index="/senior-cases">
           <i class="el-icon-folder"></i>
           <span>Senior Case List</span>
         </el-menu-item>
+      </template>
 
-        <!-- junior 用户的专属菜单 -->
-        <el-menu-item
-          v-if="userRole === 'junior'"
-          index="/junior-cases"
-        >
+      <template v-if="role === 'junior'">
+        <el-menu-item index="/junior-cases">
           <i class="el-icon-folder"></i>
           <span>Junior Case List</span>
         </el-menu-item>
+      </template>
 
-        <!-- Logout 菜单 -->
-        <el-menu-item index="/login">
-          <i class="el-icon-s-tools"></i>
-          <span @click.stop="logout">Logout</span>
-        </el-menu-item>
-      </el-menu>
-    </el-aside>
-
-    <!-- 内容区域 -->
-    <el-main class="content">
-      <!-- 插槽，用于动态加载子页面内容 -->
-      <slot></slot>
-    </el-main>
-  </el-container>
+      <!-- 公共菜单项 -->
+      <el-menu-item index="/logout" @click="logout">
+        <i class="el-icon-switch-button"></i>
+        <span>Logout</span>
+      </el-menu-item>
+    </el-menu>
+  </div>
 </template>
 
 <script>
 export default {
-  computed: {
-    userRole() {
-      return this.$store.getters.userRole; // 从 Vuex 获取当前用户角色
-    },
-  },
   data() {
     return {
-      activeMenu: "/home", // 默认激活首页
+      activeMenu: "",
+      role: "", // 当前用户角色
     };
   },
-  watch: {
-    $route(to) {
-      // 动态监听路由变化，更新 activeMenu
-      this.activeMenu = to.path;
-    },
-  },
   mounted() {
-    // 页面加载时设置 activeMenu 为当前路由
-    this.activeMenu = this.$route.path;
+    // 从 localStorage 中获取角色
+    this.role = localStorage.getItem("role");
+    this.activeMenu = this.$route.path; // 设置当前激活的菜单项
   },
   methods: {
-    handleMenuSelect(index) {
-      // 避免重复导航到当前路由
-      if (this.$route.path !== index) {
-        this.$router.push(index).catch((err) => {
-          if (err.name !== "NavigationDuplicated") {
-            console.error(err); // 仅输出非重复导航的错误
-          }
-        });
-      }
-    },
     logout() {
-      // 登出逻辑
-      this.$store.dispatch("logout");
-      this.activeMenu = "/login"; // 重置激活菜单项
+      // 清除登录信息
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
       this.$router.push("/login");
     },
   },
@@ -96,14 +57,11 @@ export default {
 
 <style scoped>
 .navbar {
-  background-color: #4caf50;
-  color: #fff;
-  height: 100%; /* 高度填满页面 */
+  width: 200px;
+  height: 100vh;
+  background-color: #f5f5f5;
 }
-
-/* 内容区域样式 */
-.content {
-  padding: 20px;
-  overflow: auto; /* 内容区域可滚动 */
+.el-menu {
+  height: 100%;
 }
 </style>
