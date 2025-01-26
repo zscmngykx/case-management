@@ -9,18 +9,18 @@ Vue.use(VueRouter);
 
 const routes = [
   { path: "/", redirect: "/login" }, // 默认重定向到登录页面
-  { path: "/home", component: Home, meta: { requiresAuth: true } },
+  { path: "/login", component: Login }, // 登录页面
+  { path: "/home", component: Home, meta: { requiresAuth: true } }, // 首页
   {
     path: "/senior-cases",
     component: SeniorCaseManagement,
-    meta: { requiresAuth: true, role: "senior" },
+    meta: { requiresAuth: true, role: "senior" }, // 仅 senior 可访问
   },
   {
     path: "/junior-cases",
     component: JuniorCaseManagement,
-    meta: { requiresAuth: true, role: "junior" },
+    meta: { requiresAuth: true, role: "junior" }, // 仅 junior 可访问
   },
-  { path: "/login", component: Login },
 ];
 
 const router = new VueRouter({
@@ -30,21 +30,22 @@ const router = new VueRouter({
 
 // 导航守卫
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem("token"); // 获取存储的 token
-  const role = localStorage.getItem("role"); // 获取存储的角色
+  const token = localStorage.getItem("token"); // 获取 token
+  const role = localStorage.getItem("role"); // 获取角色
 
   // 如果路由需要认证
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!token) {
-      // 如果没有 token，重定向到登录页面
+      // 如果未登录，跳转到登录页面
+      alert("Please log in first.");
       return next("/login");
     }
     if (to.meta.role && to.meta.role !== role) {
-      // 如果角色不匹配，阻止访问并跳转回之前的页面
+      // 如果角色不匹配，阻止访问并跳转回首页
       alert("Access denied: insufficient permissions.");
-      return next(from.path || "/login"); // 防止死循环
+      return next("/home"); // 跳转到 Home 页面
     }
-    // 如果认证通过，放行
+    // 如果认证通过，允许访问
     return next();
   }
 

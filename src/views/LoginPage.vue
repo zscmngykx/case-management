@@ -6,9 +6,19 @@
       <!-- Login form -->
       <div class="login_msg">
         <!-- Username input -->
-        <el-input placeholder="Enter your username" v-model="username" clearable id="account"></el-input>
+        <el-input
+          placeholder="Enter your username"
+          v-model="username"
+          clearable
+          id="account"
+        ></el-input>
         <!-- Password input -->
-        <el-input placeholder="Enter your password" v-model="password" id="password" show-password></el-input>
+        <el-input
+          placeholder="Enter your password"
+          v-model="password"
+          id="password"
+          show-password
+        ></el-input>
         <!-- Login button -->
         <el-button id="btn" type="primary" @click="login">Log In</el-button>
       </div>
@@ -50,20 +60,11 @@ export default {
 
       if (user) {
         // 保存用户信息到 localStorage
-        localStorage.setItem("token", "testToken"); // 假设一个 token
+        localStorage.setItem("token", "testToken"); // 模拟 token
         localStorage.setItem("role", user.role);
 
-        // 根据角色跳转到对应页面
-        if (user.role === "senior") {
-          this.$router.push("/senior-cases");
-        } else if (user.role === "junior") {
-          this.$router.push("/junior-cases");
-        } else {
-          this.$message({
-            message: "Invalid user role!",
-            type: "error",
-          });
-        }
+        // 登录成功，跳转到 Home 页面
+        this.$router.push("/home");
       } else {
         this.$message({
           message: "Invalid username or password",
@@ -76,6 +77,7 @@ export default {
 </script>
 
 <style scoped>
+/* 保留原始样式 */
 .login_msg {
   display: flex;
   flex-direction: column;
