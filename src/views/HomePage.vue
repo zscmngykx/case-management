@@ -1,77 +1,46 @@
-<template>
-  <div class="home-page">
-    <!-- 顶部欢迎语 -->
-    <div class="welcome-section">
-      <h1>Hi, {{ role }}!</h1>
-      <p>Welcome to the Case Management System. Keep up the great work!</p>
-    </div>
-
-    <!-- 主内容区域 -->
-    <div class="content-section">
-      <div class="image-placeholder">
-        <p>Image will be placed here.</p>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script>
-export default {
-  data() {
-    return {
-      role: "", // 用户角色
-    };
-  },
-  mounted() {
-    // 从 localStorage 获取用户角色
-    this.role = localStorage.getItem("role") || "Guest";
-  },
-};
-</script>
-
 <style scoped>
 .home-page {
-  text-align: center;
-  padding: 20px;
-}
-
-.welcome-section {
-  margin-bottom: 20px;
-}
-
-.welcome-section h1 {
-  font-size: 28px;
-  color: #333;
-}
-
-.welcome-section p {
-  font-size: 18px;
-  color: #666;
+  display: flex;
+  justify-content: center; /* 水平居中整个内容 */
+  align-items: center; /* 垂直居中整个内容 */
+  height: calc(90vh - 60px); /* 减去顶栏的高度（假设顶栏为 60px） */
+  margin-top: 0; /* 移除可能的顶部外边距 */
+  overflow: hidden; /* 防止内容溢出 */
 }
 
 .content-section {
-  margin-top: 20px;
-}
-
-.content-section p {
-  font-size: 16px;
-  color: #555;
-  margin-bottom: 20px;
-}
-
-.image-placeholder {
-  width: 100%;
-  height: 200px; /* 预留图片高度 */
-  background-color: #f0f0f0; /* 浅灰色背景 */
-  display: flex;
+  display: flex; /* 左右布局 */
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  border: 1px dashed #ccc; /* 虚线边框，表示占位区域 */
+  gap: 40px; /* 增加间距 */
+  max-width: 1000px; /* 增加内容区域宽度 */
+  padding: 20px; /* 减少内边距 */
 }
 
-.image-placeholder p {
-  font-size: 14px;
-  color: #999;
+.image-container {
+  flex: 1;
+  text-align: center;
+}
+
+.home-image {
+  width: 100%;
+  max-width: 400px; /* 增大图片最大宽度 */
+  border-radius: 12px;
+}
+
+.text-container {
+  flex: 1.5;
+  text-align: left;
+}
+
+.text-container h2 {
+  font-size: 32px; /* 增大标题字体 */
+  color: #333;
+  margin-bottom: 10px; /* 减小标题和文字之间的距离 */
+}
+
+.text-container p {
+  font-size: 20px; /* 增大描述字体 */
+  color: #555;
 }
 </style>
