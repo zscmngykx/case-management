@@ -132,7 +132,7 @@ export default {
 .img_box {
   width: 130px;
   height: 130px;
-  background-image: url('@/assets/profile.png'); /* 确保路径正确 */
+  background-image: url('../assets/profile.png'); /* 确保路径正确 */
   background-size: cover;
   border-radius: 50%;
   border: white solid 6px;

@@ -5,7 +5,7 @@
       <div class="content-section">
         <!-- 左边图片 -->
         <div class="image-container">
-          <img src="/dentist.png" alt="Welcome Image" class="home-image" />
+          <img :src="require('@/assets/dentist.png')" alt="Welcome Image" class="home-image" />
         </div>
         <!-- 右边文字 -->
         <div class="text-container">
