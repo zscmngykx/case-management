@@ -2,7 +2,7 @@
 
 This is a case management system designed specifically for the National Dental Centre Singapore. It helps users efficiently annotate and review data, providing role-based access control, login authentication, and a streamlined interface for user tasks.
 
----
+
 
 ### Accessing the Hosted Application
 
@@ -22,7 +22,7 @@ Instructions:
    - Senior: Access the Senior Case List.  
    - Junior: Access the Junior Case List.  
 
----
+
 
 ### Assumptions
 
@@ -35,7 +35,7 @@ Instructions:
 3. **Resource Management**  
    Images and other resources are managed within the `src/assets` and `public` folders of the project.  
 
----
+
 
 ### Limitations
 
